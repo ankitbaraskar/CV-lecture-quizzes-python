@@ -42,6 +42,7 @@ cv2.imshow('Original image, monochrome', lenaMono)
 
 # Make a blurred/smoothed version
 h = cv2.getGaussianKernel(11, 4)
+transpose = h.T
 h = h * h.T
 
 print(h)
@@ -63,7 +64,7 @@ lenaR[:, 1:] = lenaR[:, :-1]
 lenaDiff = 1. * lenaR - 1. * lenaL  # Multiplying by 1. as a shortcut to converting array to float
 
 # Here we shift the value range to fit [0, 255] and make sure the data type is uint8 in order to display the results.
-lenaDiff = cv2.normalize(lenaDiff, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
+lenaDiff = cv2.normalize(lenaDiff, dst=lenaDiff, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
 cv2.imshow('Difference between right and left shifted images', lenaDiff.astype(np.uint8))
 
 # Method 2: Canny edge detector
@@ -84,7 +85,8 @@ h = LoG(4, 1.)
 surf(h)
 
 logEdges = cv2.filter2D(1. * lenaMono, -1, h, borderType=cv2.BORDER_CONSTANT)
-logEdgesShow = cv2.normalize(logEdges, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
+logEdgesShow = 0
+logEdgesShow = cv2.normalize(logEdges, dst=logEdgesShow, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
 
 cv2.imshow('Laplacian image before zero crossing', logEdgesShow.astype(np.uint8))
 
